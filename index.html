@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Library - Bootstrap</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .page-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .controls-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-img-top {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1.25rem;
+        }
+
+        .card-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .card-text {
+            color: #666;
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+
+        .card-footer {
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            padding: 1rem 1.25rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-weight: 700;
+        }
+
+        .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .tracklist-table {
+            margin-bottom: 0;
+        }
+
+        .tracklist-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .tracklist-table td {
+            vertical-align: middle;
+        }
+
+        .track-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .track-link:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .spotify-icon {
+            color: #1DB954;
+            margin-left: 0.25rem;
+        }
+
+        #backToTop {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        #backToTop:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #backToTop.show {
+            display: flex;
+        }
+
+        .album-col {
+            transition: opacity 0.3s ease;
+        }
+
+        .album-col.hidden {
+            display: none;
+        }
+
+        @media (max-width: 576px) {
+            .card-img-top {
+                height: 200px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="page-header">
+            <h1><i class="bi bi-music-note-beamed"></i> Music Library</h1>
+            <p>Explore your favorite metal albums</p>
+        </div>
+
+
+        <div class="controls-section">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-6">
+                    <label for="searchInput" class="form-label fw-semibold">
+                        <i class="bi bi-search"></i> Search Albums
+                    </label>
+                    <input type="text" class="form-control" id="searchInput"
+                        placeholder="Search by artist or album name...">
+                </div>
+                <div class="col-md-6">
+                    <label for="sortSelect" class="form-label fw-semibold">
+                        <i class="bi bi-sort-down"></i> Sort By
+                    </label>
+                    <select class="form-select" id="sortSelect">
+                        <option value="default">Default Order</option>
+                        <option value="artist-asc">Artist (A-Z)</option>
+                        <option value="album-asc">Album (A-Z)</option>
+                        <option value="tracks-asc">Tracks (Least First)</option>
+                        <option value="tracks-desc">Tracks (Most First)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row" id="albumsContainer">
+
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="albumModal" tabindex="-1" aria-labelledby="albumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="albumModalLabel">Album Details</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Close Tracklist
+                    </button>
+                    <a href="#" id="playOnSpotify" target="_blank" class="btn btn-success">
+                        <i class="bi bi-spotify"></i> Play on Spotify
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <button id="backToTop" title="Back to top">
+        <i class="bi bi-arrow-up" style="font-size: 1.5rem;"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
+    <script>
+        let albumsData = [];
+        let currentSort = 'default';
+
+
+        function loadAlbums() {
+            albumsData = [{ "id": 1, "artist": "Iron Maiden", "album": "Brave New World", "thumbnail": "1.jpg", "tracklist": [{ "number": 1, "title": "The Wicker Man", "trackLength": "4:35", "url": "https://open.spotify.com/track/1diuZVsxD74xvtUSABRUoF?si=884747ed96ab484d" }, { "number": 2, "title": "Ghost of the Navigator", "trackLength": "6:51", "url": "https://open.spotify.com/track/6KLUI6LnYdg5PIb5VKWSzu?si=e69e603772f849aa" }, { "number": 3, "title": "Brave New World", "trackLength": "6:19", "url": "https://open.spotify.com/track/5hAAcyKfcw8nJ2Kgx3FXd0?si=45de3beb03e14998" }, { "number": 4, "title": "Blood Brothers", "trackLength": "7:14", "url": "https://open.spotify.com/track/4q9YY8eorYGjpjk3Zko7l9?si=763b42ba05a64170" }, { "number": 5, "title": "The Mercenary", "trackLength": "4:42", "url": "https://open.spotify.com/track/0WGBotn3YOsajQPxcNSgNi?si=0bfcf26211e449a3" }, { "number": 6, "title": "Dream of Mirrors", "trackLength": "9:21", "url": "https://open.spotify.com/track/2GJUBmvnT8mZ9IyuPS9SsI?si=05fbf7ad5d92480c" }, { "number": 7, "title": "The Fallen Angel", "trackLength": "4:01", "url": "https://open.spotify.com/track/3rKzE0Dx4rLM2kQRfDYDZc?si=115bda8b3c1b4a20" }, { "number": 8, "title": "The Nomad", "trackLength": "9:06", "url": "https://open.spotify.com/track/1QZPGP6Srliq75NFwtwwvL?si=9b74c1a7558c4700" }, { "number": 9, "title": "Out Of The Silent Planet", "trackLength": "6:26", "url": "https://open.spotify.com/track/4UV7lyqZU3JmAZJjFO6DK8?si=a124a48866474031" }, { "number": 10, "title": "The Thin Line Between Love And Hate", "trackLength": "8:27", "url": "https://open.spotify.com/track/7m0XcFYchWHV0EnerStmYg?si=4340a7d883d64833" }] }, { "id": 2, "artist": "Killswitch Engage", "album": "As Daylight Dies", "thumbnail": "2.jpg", "tracklist": [{ "number": 1, "title": "Daylight Dies", "trackLength": "4:06", "url": "https://open.spotify.com/track/6CyG0BQ3316fg5UM7B9EOZ?si=f1bb0d44c7674321" }, { "number": 2, "title": "This Is Absolution", "trackLength": "3:34", "url": "https://open.spotify.com/track/7lcuIiWzol3KwvDspHqG5c?si=3288542461964bbd" }, { "number": 3, "title": "The Arms Of Sorrow", "trackLength": "3:44", "url": "https://open.spotify.com/track/42lC6bnDdAjRqZtsFe1tmg?si=c423719655034d6b" }, { "number": 4, "title": "Unbroken", "trackLength": "3:09", "url": "https://open.spotify.com/track/5PU6F7feSaAPhvSv4GbQLP?si=15feaaa03f824357" }, { "number": 5, "title": "My Curse", "trackLength": "4:05", "url": "https://open.spotify.com/track/6zKF4293k44ItKWJJgrhXv?si=933188b415d44246" }, { "number": 6, "title": "For You", "trackLength": "4:03", "url": "https://open.spotify.com/track/050DHpB2u2E8i9JL6syLaS?si=188f1f96630c49b4" }, { "number": 7, "title": "Still Beats Your Name", "trackLength": "3:20", "url": "https://open.spotify.com/track/2A1cj9MUHz2ClwOY4hSPmT?si=6aa1b45579324b0a" }, { "number": 8, "title": "Eye of the Storm", "trackLength": "3:56", "url": "https://open.spotify.com/track/5r37NetsrDZOMuOev51PHL?si=08112cfab28f496f" }, { "number": 9, "title": "Break The Silence", "trackLength": "4:32", "url": "https://open.spotify.com/track/65p1BLj8pYwTpjrIflUIvc?si=bed8b087f7f044c8" }, { "number": 10, "title": "Desperate Times", "trackLength": "4:26", "url": "https://open.spotify.com/track/4hao5QyH9QKXi902ERMQ5D?si=eda5174cfa5540b7" }, { "number": 11, "title": "Reject Yourself", "trackLength": "4:45", "url": "https://open.spotify.com/track/6uKBiE9XMSeyD62Ud86JQY?si=2062d9ca69df4688" }, { "number": 12, "title": "Be One", "trackLength": "3:31", "url": "https://open.spotify.com/track/0CMiOvH9drrUDT8pOBD9bk?si=2f88a37b85d144b3" }, { "number": 13, "title": "Let The Bridges Burn", "trackLength": "4:29", "url": "https://open.spotify.com/track/32ebJQC2dQyDvFAbiRYwdH?si=48855349943f423c" }, { "number": 14, "title": "This Fire", "trackLength": "3:09", "url": "https://open.spotify.com/track/07ceEXOyS7ghQkyCOycXwP?si=8e9809cf671d4d87" }, { "number": 15, "title": "Holy Diver", "trackLength": "4:10", "url": "https://open.spotify.com/track/3a9urnht8HvfFzPwd0ipx6?si=13141df965e544be" }] }, { "id": 3, "artist": "Disturbed", "album": "Ten Thousand Fists", "thumbnail": "3.jpg", "tracklist": [{ "number": 1, "title": "Ten Thousand Fists", "trackLength": "3:33", "url": "https://open.spotify.com/track/5hkgrWxkobGtg30I7DsfVu?si=2113867e425a4ac9" }, { "number": 2, "title": "Just Stop", "trackLength": "3:46", "url": "https://open.spotify.com/track/3WiXCGEioBloorG63T3dSF?si=ffa91a0f54444e01" }, { "number": 3, "title": "Guarded", "trackLength": "3:22", "url": "https://open.spotify.com/track/0f2YRp5HLHVzqIs8KfY6T1?si=f365df952b834dab" }, { "number": 4, "title": "Deify", "trackLength": "4:18", "url": "https://open.spotify.com/track/3H1SsrSSXeMFNj206eYim8?si=dafbbaf2bccb4703" }, { "number": 5, "title": "Stricken", "trackLength": "4:07", "url": "https://open.spotify.com/track/6RJdYpFQwLyNfDc5FbjkgV?si=5480879bfaa844ec" }, { "number": 6, "title": "I'm Alive", "trackLength": "4:42", "url": "https://open.spotify.com/track/1gFrm3uL7UAtmjaPspYedU?si=4cc9958bad0d48ad" }, { "number": 7, "title": "Sons Of Plunder", "trackLength": "3:51", "url": "https://open.spotify.com/track/69ZRVsGoLXjHrQWHMX5iCN?si=5b80fda4d00c4242" }, { "number": 8, "title": "Overburdened", "trackLength": "5:59", "url": "https://open.spotify.com/track/71qQhkbrt4gVbovwbzHLpE?si=34e81679c3654151" }, { "number": 9, "title": "Decadence", "trackLength": "3:27", "url": "https://open.spotify.com/track/0jY829pCMnstlNtaE72vSB?si=091a9d5214d74c04" }, { "number": 10, "title": "Forgiven", "trackLength": "4:15", "url": "https://open.spotify.com/track/2UiFk0Fwy2gTWJShgQL8el?si=82801be5bea543d0" }, { "number": 11, "title": "Land Of Confusion", "trackLength": "4:50", "url": "https://open.spotify.com/track/4ClGNWLK9vZMBtO0CpnyOE?si=feedf0c6163b45e8" }, { "number": 12, "title": "Sacred Lie", "trackLength": "3:08", "url": "https://open.spotify.com/track/7yZtrG0ktXcDCyWkmIWmEi?si=d68ba58148984760" }, { "number": 13, "title": "Pain Redefined", "trackLength": "4:10", "url": "https://open.spotify.com/track/4H6qtMPzKYRCsf7bT2DcBP?si=63e80a68a0f14cf7" }, { "number": 14, "title": "Avarice", "trackLength": "2:57", "url": "https://open.spotify.com/track/2mIlzbbLp09YcvqmOHwQ1F?si=4033de6686bc49d9" }] }, { "id": 4, "artist": "Black Label Society", "album": "Catacombs Of The Black Vatican", "thumbnail": "4.jpg", "tracklist": [{ "number": 1, "title": "Fields Of Unforgiveness", "trackLength": "3:13", "url": "https://open.spotify.com/track/6tLnkIhwj40QvIVqWjitea?si=c14e0dc124ee4493" }, { "number": 2, "title": "My Dying Time", "trackLength": "3:22", "url": "https://open.spotify.com/track/4krUZEH9yRVsVijAqNyE6W?si=eb64280e9cf04fe0" }, { "number": 3, "title": "Believe", "trackLength": "3:45", "url": "https://open.spotify.com/track/69kPzTssvaySbKLm9IBfZ6?si=e30e88d07bbb4baa" }, { "number": 4, "title": "Angel Of Mercy", "trackLength": "4:15", "url": "https://open.spotify.com/track/0XWvgu03BoLkenwABrlXgA?si=4599b52073b74591" }, { "number": 5, "title": "Heart Of Darkness", "trackLength": "3:39", "url": "https://open.spotify.com/track/5lEYCNLcK3K3fqSxnKcRzM?si=5417083ff5d54b7a" }, { "number": 6, "title": "Beyond The Down", "trackLength": "2:55", "url": "https://open.spotify.com/track/2bflzRFkWyqBhFZUyohIXF?si=b5e495c5adfa46c1" }, { "number": 7, "title": "Scars", "trackLength": "4:14", "url": "https://open.spotify.com/track/1Gylumek497cXASCmEo7nX?si=ce0ff2b676b74ae0" }, { "number": 8, "title": "Damn The Flood", "trackLength": "3:19", "url": "https://open.spotify.com/track/2Uqo1ndC9ZKk39mxlLSCAx?si=cc4f7b6510ab4947" }, { "number": 9, "title": "I've Gone Away", "trackLength": "3:52", "url": "https://open.spotify.com/track/2jeszLAFPiqWImgIbusnfM?si=ca7ab61f52564d4f" }, { "number": 10, "title": "Empty Promises", "trackLength": "5:17", "url": "https://open.spotify.com/track/5FAq5yTFc2IZcMUqPNoi0F?si=b5d5c1a8b5fb4351" }, { "number": 11, "title": "Shades Of Gray", "trackLength": "6:29", "url": "https://open.spotify.com/track/64bopMv9spmNCoc6c0h8vT?si=fbb05d3db9c94b29" }] }, { "id": 5, "artist": "Zakk Wylde", "album": "Book Of Shadows", "thumbnail": "5.jpg", "tracklist": [{ "number": 1, "title": "Between Heaven And Hell", "trackLength": "3:26", "url": "https://open.spotify.com/track/0iiE0jPv42VEnxqI7pHG26?si=efd04fb4ffe948a5" }, { "number": 2, "title": "Sold My Sould", "trackLength": "4:53", "url": "https://open.spotify.com/track/1uQo4sATuWs8LOXIVKtjD0?si=5fdbb6616d5e4f6a" }, { "number": 3, "title": "Road Back Home", "trackLength": "5:48", "url": "https://open.spotify.com/track/0CBdMonvT7qNTbENjvWmQ8?si=f3d36cafe9b14486" }, { "number": 4, "title": "Way Beyond Empty", "trackLength": "5:25", "url": "https://open.spotify.com/track/566NxAgkblfictNfagrVFv?si=4d836e10079647a0" }, { "number": 5, "title": "Throwin' It All Away", "trackLength": "5:48", "url": "https://open.spotify.com/track/7jxQkTJ2nL9iL3SLUSAA4s?si=f41164cae7d6498a" }, { "number": 6, "title": "What You're Look'n For", "trackLength": "5:32", "url": "https://open.spotify.com/track/6cUl4sGbx5ZauRLZ5vLBcR?si=a0d0f33de9dc4c14" }, { "number": 7, "title": "Dead As Yesterday", "trackLength": "2:51", "url": "https://open.spotify.com/track/0ZfrIS3RsoU8NYPZLtd05O?si=c75534ce14ad4ba8" }, { "number": 8, "title": "Too Numb To Cry", "trackLength": "2:23", "url": "https://open.spotify.com/track/4qslujcIx7Sr9oIV6d0ZBr?si=c01762cf709542ab" }, { "number": 9, "title": "The Things You Do", "trackLength": "4:11", "url": "https://open.spotify.com/track/3eX6FPnCH9Lb7EcPiIFb6n?si=9d37ab620acb43da" }, { "number": 10, "title": "1,000,000 Miles Away", "trackLength": "6:29", "url": "https://open.spotify.com/track/0UtbrwYPJ8BwZk4FNZ9pop?si=d5863843be0049aa" }, { "number": 11, "title": "I Thank You Child", "trackLength": "4:42", "url": "https://open.spotify.com/track/3Ii0J9yywjdDBmMGBNGrG6?si=901eb47f9e4c47ac" }, { "number": 12, "title": "Evil Ways", "trackLength": "4:13", "url": "https://open.spotify.com/track/5G3QyvS96HLnjmTrwrptMt?si=e1773705a6014b57" }, { "number": 13, "title": "The Color Green", "trackLength": "3:05", "url": "https://open.spotify.com/track/5X1gM1nLALePvyrXyNgvF1?si=d2e94dcb0c994c77" }, { "number": 14, "title": "Peddlers Of Death", "trackLength": "5:49", "url": "https://open.spotify.com/track/39RA7FMIyc9qXpelSSS9TZ?si=954b11de9d9f423c" }] }, { "id": 6, "artist": "King Diamond", "album": "Abigail", "thumbnail": "6.jpg", "tracklist": [{ "number": 1, "title": "Funeral", "trackLength": "1:30", "url": "https://open.spotify.com/track/0tOcd1QWItFKoC00vUe4Sf?si=f2c78b977a1445cf" }, { "number": 2, "title": "Arrival", "trackLength": "5:26", "url": "https://open.spotify.com/track/2qQsNNNju15NSgfujNsn51?si=d012f706fc0a48f3" }, { "number": 3, "title": "A Mansion In Darkness", "trackLength": "4:34", "url": "https://open.spotify.com/track/4HfN1Va6mpA01EonsJ6Vtf?si=2248e1edcc4c4a47" }, { "number": 4, "title": "The Family Ghost", "trackLength": "4:06", "url": "https://open.spotify.com/track/22QjS2MJuqxuiwEieeQhPx?si=b262c8f1f4dd4696" }, { "number": 5, "title": "The 7th Day Of July 1777", "trackLength": "4:50", "url": "https://open.spotify.com/track/2h1t6bUoc42nkHkj1Dd3ED?si=f5387c93f238471c" }, { "number": 6, "title": "Omens", "trackLength": "3:56", "url": "https://open.spotify.com/track/5bbE2aWWhhnOLA5uui4WMr?si=d8aafaa93c3a4d63" }, { "number": 7, "title": "The Possession", "trackLength": "3:26", "url": "https://open.spotify.com/track/2jBFatjNKK0ljiSZBNAmV6?si=07d89fdd26a04167" }, { "number": 8, "title": "Abigail", "trackLength": "4:50", "url": "https://open.spotify.com/track/1nGUPxgKc1wmWfi8OkCCic?si=b1377319b08b45ca" }, { "number": 9, "title": "Black Horsemen", "trackLength": "7:40", "url": "https://open.spotify.com/track/6GVefvGoD9JFhI71CV2VRy?si=eebce52e94ee4c99" }] }, { "id": 7, "artist": "Alter Bridge", "album": "One Day Remains", "thumbnail": "7.jpg", "tracklist": [{ "number": 1, "title": "Find The Real", "trackLength": "4:44", "url": "https://open.spotify.com/track/1PotmRJ9g0y6zLVbJMKeV2?si=e4d635ecd82b4aab" }, { "number": 2, "title": "One Day Remains", "trackLength": "4:05", "url": "https://open.spotify.com/track/2h0qBK4pSWY6WlRym0xaEh?si=044f4f3217b94021" }, { "number": 3, "title": "Open Your Eyes", "trackLength": "4:59", "url": "https://open.spotify.com/track/3Gbyl3XZVeEcnFPiiPR09n?si=b4a4c9a5acb44940" }, { "number": 4, "title": "Burn It Down", "trackLength": "6:11", "url": "https://open.spotify.com/track/0QULseV272MmSxtvK6Fe2w?si=f74888950c534f61" }, { "number": 5, "title": "Metalingus", "trackLength": "4:20", "url": "https://open.spotify.com/track/3UULkHdmLDqBDPmBYltoRE?si=fd92445196b54e99" }, { "number": 6, "title": "Broken Wings", "trackLength": "5:07", "url": "https://open.spotify.com/track/7ePjtuqKqa0ZbzznCNqiEf?si=ffabcdcdfa554cc7" }, { "number": 7, "title": "In Loving Memory", "trackLength": "5:40", "url": "https://open.spotify.com/track/0T9tbj6zsRKLiUx06sbOWX?si=8d3175949d654a3c" }, { "number": 8, "title": "Down To My Last", "trackLength": "4:46", "url": "https://open.spotify.com/track/20iv6eIFgXokinSmgAkVxS?si=2a74eeb2c3de41b8" }, { "number": 9, "title": "Watch Your Words", "trackLength": "5:25", "url": "https://open.spotify.com/track/628uwDKU7LqR8C0o2KTTd7?si=f472f0e728b24c10" }, { "number": 10, "title": "Shed My Skin", "trackLength": "5:09", "url": "https://open.spotify.com/track/1o9ydH6XyWboIFZIZSDXfj?si=6794601b8b57422d" }, { "number": 11, "title": "The End Is Here", "trackLength": "4:58", "url": "https://open.spotify.com/track/4rgE0xiMwo4icKEa4w8Vun?si=12fc2d595d9944c4" }] }, { "id": 8, "artist": "Amon Amarth", "album": "Twilight Of The Thunder God", "thumbnail": "8.jpg", "tracklist": [{ "number": 1, "title": "Twilight Of The Thunder God", "trackLength": "4:09", "url": "https://open.spotify.com/track/5u3l2TONYacJgmRPQVaF9y?si=7b5a1b6266584234" }, { "number": 2, "title": "Free Will Sacrifice", "trackLength": "4:09", "url": "https://open.spotify.com/track/5Dx8DhETu8DryPg4ap0DDc?si=ff53b499ba764680" }, { "number": 3, "title": "Guardians Of Asgaard", "trackLength": "4:23", "url": "https://open.spotify.com/track/2DR9AzDhYeStkHupvU08FC?si=ac1ec481f75c4c84" }, { "number": 4, "title": "Where Is Your God?", "trackLength": "3:11", "url": "https://open.spotify.com/track/7sW6sWJxVBT65FPLHgRYUT?si=018d18a4dc7c4fb6" }, { "number": 5, "title": "Varyags Of Miklagaard", "trackLength": "4:18", "url": "https://open.spotify.com/track/1Vps9IVy4MXNzBNrzlkAiB?si=fc4020ff8ca841f8" }, { "number": 6, "title": "Tattered Banners And Bloody Flags", "trackLength": "4:30", "url": "https://open.spotify.com/track/1hk3KoGI5WlLbSvE3u88hR?si=2fec4e4e63084e8a" }, { "number": 7, "title": "No Fear For The Setting Sun", "trackLength": "3:52", "url": "https://open.spotify.com/track/1wE9SZ9tLHyVIkGwDGpvv5?si=b7f7453bebce4af5" }, { "number": 8, "title": "The Hero", "trackLength": "4:02", "url": "https://open.spotify.com/track/3fTwPebsGs7q0rOrFkuwrF?si=fd0524fe2e524551" }, { "number": 9, "title": "Live For The Kill", "trackLength": "4:10", "url": "https://open.spotify.com/track/12ZmgHSXxzQKXetOIstzcT?si=5148f8e863234f65" }, { "number": 10, "title": "Embrace Of The Endless Ocean", "trackLength": "6:44", "url": "https://open.spotify.com/track/0neBDiKwSS6L67sFNwQapy?si=cd6df4d1ce724d5e" }] }, { "id": 9, "artist": "Kamelot", "album": "Epica", "thumbnail": "9.jpg", "tracklist": [{ "number": 1, "title": "Prologue", "trackLength": "1:07", "url": "https://open.spotify.com/track/6sbILIeqNQoy4CSd0z6nUY?si=c89cb253a93146c3" }, { "number": 2, "title": "Center Of The Universe", "trackLength": "5:26", "url": "https://open.spotify.com/track/6aC9xeShtKqsxqHnfLii6X?si=7201b9734ee34b91" }, { "number": 3, "title": "Farewell", "trackLength": "3:41", "url": "https://open.spotify.com/track/2TWuYFV998qZd899zufGpR?si=e4a4993025b84306" }, { "number": 4, "title": "Interlude I: Opiate Soul", "trackLength": "1:10", "url": "https://open.spotify.com/track/7zB4Z0zcw06BdFjqsoFezz?si=78d32612b0eb401d" }, { "number": 5, "title": "The Edge Of Paradise", "trackLength": "4:09", "url": "https://open.spotify.com/track/7y4m8nwdzQrGNEKMd5hstK?si=cefa4b02e1bc40b1" }, { "number": 6, "title": "Wander", "trackLength": "4:24", "url": "https://open.spotify.com/track/36fghM2btZusuq2oekRjit?si=c770a5473a3d412b" }, { "number": 7, "title": "Interlude II: Omen", "trackLength": "0:40", "url": "https://open.spotify.com/track/5wQ5NujxYzn37dXyG3y0QD?si=f98462d791954a0e" }, { "number": 8, "title": "Descent Of The Archangel", "trackLength": "4:35", "url": "https://open.spotify.com/track/14vxS0vxpTT7JYdqNVnPS8?si=6c1f2ca122c84639" }, { "number": 9, "title": "Interlude III: At The Banquet", "trackLength": "0:30", "url": "https://open.spotify.com/track/3DIB0HUZugzYmb724r9M61?si=82b105d250fb4437" }, { "number": 10, "title": "A Feast For The Vain", "trackLength": "3:57", "url": "https://open.spotify.com/track/7qVfGam8ADZsSL1xKVH9TN?si=767e240fbaf648b1" }, { "number": 11, "title": "On The Coldest Winter Night", "trackLength": "4:03", "url": "https://open.spotify.com/track/4Uu4zoQ2UFM6A0VfzJFh5o?si=b54d63bc283444c5" }, { "number": 12, "title": "Lost & Damned", "trackLength": "4:55", "url": "https://open.spotify.com/track/0MsgPfFAd0q7EppMflKrtW?si=1af5d6c2a2a34ed6" }, { "number": 13, "title": "Helena's Theme", "trackLength": "1:51", "url": "https://open.spotify.com/track/1pBfaB39rwzOJ8f77nwVhT?si=0b86479870994c77" }, { "number": 14, "title": "Interlude IV: Dawn", "trackLength": "0:27", "url": "https://open.spotify.com/track/00wY7MqxKYanHanjgaRq4J?si=8135fbfc4bfa480d" }, { "number": 15, "title": "The Mourning After (Carry On)", "trackLength": "4:59", "url": "https://open.spotify.com/track/797iOPCLcaWj63L6KTHdnC?si=40dbf5e0c2ea403b" }, { "number": 16, "title": "III Ways To Epica", "trackLength": "6:16", "url": "https://open.spotify.com/track/20ImlV4h29fxYyJLJP4Qev?si=36523922293d48ec" }] }];
+            displayAlbums(albumsData);
+        }
+
+
+        function displayAlbums(albums) {
+            const container = document.getElementById('albumsContainer');
+            container.innerHTML = '';
+
+            albums.forEach(album => {
+                const col = document.createElement('div');
+                col.className = 'col-xl-2 col-md-3 col-sm-6 col-12 mb-4 album-col';
+                col.dataset.albumId = album.id;
+
+                col.innerHTML = `
+                    <div class="card h-100">
+                        <img src="assets/img/${album.thumbnail}" class="card-img-top" alt="${album.album} cover">
+                        <div class="card-body">
+                            <h5 class="card-title">${album.artist}</h5>
+                            <p class="card-text">${album.album}</p>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-primary w-100" onclick="showAlbumDetails(${album.id})">
+                                <i class="bi bi-list-ul"></i> View Tracklist
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(col);
+            });
+        }
+
+
+        function timeToSeconds(timeStr) {
+            const parts = timeStr.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+        }
+
+
+        function secondsToTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+
+        function calculateStats(tracklist) {
+            const totalTracks = tracklist.length;
+            const totalSeconds = tracklist.reduce((sum, track) => sum + timeToSeconds(track.trackLength), 0);
+            const avgSeconds = Math.floor(totalSeconds / totalTracks);
+
+            const trackLengths = tracklist.map(t => ({
+                title: t.title,
+                seconds: timeToSeconds(t.trackLength)
+            }));
+
+            const longest = trackLengths.reduce((max, t) => t.seconds > max.seconds ? t : max);
+            const shortest = trackLengths.reduce((min, t) => t.seconds < min.seconds ? t : min);
+
+            return {
+                totalTracks,
+                totalDuration: secondsToTime(totalSeconds),
+                avgDuration: secondsToTime(avgSeconds),
+                longest: longest.title,
+                shortest: shortest.title
+            };
+        }
+
+
+        function showAlbumDetails(albumId) {
+            const album = albumsData.find(a => a.id === albumId);
+            if (!album) return;
+
+            const stats = calculateStats(album.tracklist);
+            const modalTitle = document.getElementById('albumModalLabel');
+            const modalBody = document.getElementById('modalBody');
+            const playButton = document.getElementById('playOnSpotify');
+
+            modalTitle.textContent = `${album.artist} - ${album.album}`;
+            playButton.href = album.tracklist[0].url;
+
+            let tracklistHTML = `
+                <div class="stats-card">
+                    <h6 class="mb-3"><i class="bi bi-bar-chart-fill"></i> Album Statistics</h6>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value">${stats.totalTracks}</span>
+                            <span class="stat-label">Total Tracks</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">${stats.totalDuration}</span>
+                            <span class="stat-label">Total Duration</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">${stats.avgDuration}</span>
+                            <span class="stat-label">Average Length</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value"><i class="bi bi-trophy-fill"></i></span>
+                            <span class="stat-label">Longest: ${stats.longest}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="mb-3"><i class="bi bi-music-note-list"></i> Tracklist</h6>
+                <div class="table-responsive">
+                    <table class="table table-hover tracklist-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">#</th>
+                                <th>Track Title</th>
+                                <th style="width: 80px;">Length</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            album.tracklist.forEach(track => {
+                tracklistHTML += `
+                    <tr>
+                        <td class="text-muted">${track.number}</td>
+                        <td>
+                            <a href="${track.url}" target="_blank" class="track-link">
+                                ${track.title}
+                                <i class="bi bi-spotify spotify-icon"></i>
+                            </a>
+                        </td>
+                        <td class="text-muted">${track.trackLength}</td>
+                    </tr>
+                `;
+            });
+
+            tracklistHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            modalBody.innerHTML = tracklistHTML;
+
+            const modal = new bootstrap.Modal(document.getElementById('albumModal'));
+            modal.show();
+        }
+
+
+        document.getElementById('searchInput').addEventListener('input', function (e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const albumCols = document.querySelectorAll('.album-col');
+
+            albumCols.forEach(col => {
+                const albumId = parseInt(col.dataset.albumId);
+                const album = albumsData.find(a => a.id === albumId);
+
+                const matchesSearch = album.artist.toLowerCase().includes(searchTerm) ||
+                    album.album.toLowerCase().includes(searchTerm);
+
+                if (matchesSearch) {
+                    col.classList.remove('hidden');
+                } else {
+                    col.classList.add('hidden');
+                }
+            });
+        });
+
+
+        document.getElementById('sortSelect').addEventListener('change', function (e) {
+            currentSort = e.target.value;
+            let sortedAlbums = [...albumsData];
+
+            switch (currentSort) {
+                case 'artist-asc':
+                    sortedAlbums.sort((a, b) => a.artist.localeCompare(b.artist));
+                    break;
+                case 'album-asc':
+                    sortedAlbums.sort((a, b) => a.album.localeCompare(b.album));
+                    break;
+                case 'tracks-asc':
+                    sortedAlbums.sort((a, b) => a.tracklist.length - b.tracklist.length);
+                    break;
+                case 'tracks-desc':
+                    sortedAlbums.sort((a, b) => b.tracklist.length - a.tracklist.length);
+                    break;
+                default:
+                    sortedAlbums = [...albumsData];
+            }
+
+            displayAlbums(sortedAlbums);
+        });
+
+
+        const backToTopButton = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', function () {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        backToTopButton.addEventListener('click', function () {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+
+        loadAlbums();
+    </script>
+</body>
+
+</html>
